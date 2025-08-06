@@ -2,7 +2,7 @@
 
 <div class="container py-4">
   <h1>Shopping Cart</h1>
-  
+
   <% if current_cart.empty? %>
     <div class="text-center py-5">
       <i class="bi bi-bag display-1 text-muted"></i>
@@ -67,12 +67,12 @@
             </div>
           </div>
         <% end %>
-        
+
         <div class="mt-3 d-flex justify-content-between align-items-center">
           <%= link_to products_path, class: "btn btn-outline-primary" do %>
             <i class="bi bi-arrow-left"></i> Continue Shopping
           <% end %>
-          
+
           <%= button_to clear_cart_path, method: :delete, 
                         class: "btn btn-outline-danger", 
                         confirm: "Are you sure you want to clear your entire cart?",
@@ -81,7 +81,7 @@
           <% end %>
         </div>
       </div>
-      
+
       <div class="col-lg-4">
         <div class="card sticky-top" style="top: 20px;">
           <div class="card-header">
@@ -92,29 +92,32 @@
               <span>Items in cart:</span>
               <span><%= current_cart.total_items %></span>
             </div>
-            
+
             <div class="d-flex justify-content-between mb-2">
               <span>Subtotal:</span>
               <span class="fw-bold">$<%= sprintf("%.2f", current_cart.subtotal) %></span>
             </div>
-            
+
             <hr>
-            
+
             <div class="d-flex justify-content-between mb-3">
               <span>Estimated Tax:</span>
               <span class="text-muted">Calculated at checkout</span>
             </div>
-            
+
             <div class="d-flex justify-content-between mb-3 fs-5">
               <span class="fw-bold">Total:</span>
               <span class="fw-bold">$<%= sprintf("%.2f", current_cart.subtotal) %></span>
             </div>
-            
+
             <div class="d-grid gap-2">
               <% if logged_in? %>
-                <%= link_to checkout_path, class: "btn btn-primary btn-lg" do %>
-                  <i class="bi bi-credit-card"></i> Proceed to Checkout
-                <% end %>
+                <button class="btn btn-success btn-lg" onclick="placeOrder()" type="button">
+                  <i class="bi bi-bag-check"></i> Place Order
+                </button>
+                <div id="order-status" class="text-success mt-2 fw-bold text-center" style="display: none;">
+                  ✅ Order placed!
+                </div>
               <% else %>
                 <%= link_to login_path, class: "btn btn-primary btn-lg" do %>
                   <i class="bi bi-person"></i> Login to Checkout
@@ -124,7 +127,7 @@
                 </small>
               <% end %>
             </div>
-            
+
             <div class="text-center mt-3">
               <small class="text-muted">
                 <i class="bi bi-shield-check"></i> Secure checkout with SSL encryption
@@ -132,7 +135,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Security & Shipping Info -->
         <div class="card mt-3">
           <div class="card-body">
@@ -161,3 +164,15 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  function placeOrder() {
+    const statusDiv = document.getElementById("order-status");
+    statusDiv.style.display = "block";
+
+    // Optional: Disable the button after placing order
+    const button = document.querySelector("button[onclick='placeOrder()']");
+    button.disabled = true;
+    button.innerHTML = '<i class="bi bi-check2-circle"></i> Order Placed';
+  }
+</script>
