@@ -1,0 +1,49 @@
+<footer class="bg-dark text-light py-5 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <h5 class="fw-bold mb-3">
+          <i class="bi bi-phone me-2"></i>Astarr
+        </h5>
+        <p class="text-muted">Premium iPhone cases that combine style, protection, and quality craftsmanship.</p>
+      </div>
+      
+      <div class="col-md-3">
+        <h6 class="fw-bold mb-3">Products</h6>
+        <ul class="list-unstyled">
+          <li><%= link_to "All Cases", products_path, class: "text-muted text-decoration-none" %></li>
+          <li><%= link_to "Astarr Regular", products_path(category: 'astarr'), class: "text-muted text-decoration-none" %></li>
+          <li><%= link_to "Astarr Premium", products_path(category: 'astarr-premium'), class: "text-muted text-decoration-none" %></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-3">
+        <h6 class="fw-bold mb-3">Support</h6>
+        <ul class="list-unstyled">
+          <li><%= link_to "Contact Us", contact_path, class: "text-muted text-decoration-none" %></li>
+          <li><%= link_to "Shipping Info", shipping_path, class: "text-muted text-decoration-none" %></li>
+          <li><%= link_to "Returns", returns_path, class: "text-muted text-decoration-none" %></li>
+          <li><%= link_to "About Us", about_path, class: "text-muted text-decoration-none" %></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-3">
+        <h6 class="fw-bold mb-3">Connect</h6>
+        <p class="text-muted small">
+          <i class="bi bi-envelope me-2"></i>support@astarr.com<br>
+          <i class="bi bi-telephone me-2"></i>1-800-ASTARR-1
+        </p>
+      </div>
+    </div>
+    
+    <hr class="my-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="text-muted small mb-0">&copy; <%= Date.current.year %> Astarr Cases Inc. All rights reserved.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="text-muted small mb-0">Made with ❤️ in Canada</p>
+      </div>
+    </div>
+  </div>
+</footer>

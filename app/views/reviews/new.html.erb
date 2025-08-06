@@ -1,0 +1,160 @@
+<% content_for :title, "Write a Review" %>
+
+<div class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+      <li class="breadcrumb-item"><%= link_to "Products", products_path %></li>
+      <li class="breadcrumb-item"><%= link_to @product.name, @product %></li>
+      <li class="breadcrumb-item active">Write Review</li>
+    </ol>
+  </nav>
+  
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title mb-0">Write a Review for <%= @product.name %></h3>
+        </div>
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <% if @product.primary_image&.image&.attached? %>
+                <%= image_tag @product.primary_image.image, class: "img-fluid rounded" %>
+              <% else %>
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 120px;">
+                  <i class="bi bi-phone display-4 text-muted"></i>
+                </div>
+              <% end %>
+            </div>
+            <div class="col-md-9">
+              <h5><%= @product.name %></h5>
+              <p class="text-muted">for <%= @product.iphone_model %> • <%= @product.color %></p>
+              <p class="fw-bold">$<%= sprintf("%.2f", @product.current_price) %></p>
+            </div>
+          </div>
+          
+          <%= form_with model: [@product, @review], local: true do |f| %>
+            <% if @review.errors.any? %>
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  <% @review.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            
+            <div class="mb-3">
+              <%= f.label :rating, class: "form-label" %>
+              <div class="star-rating mb-2">
+                <% (1..5).each do |i| %>
+                  <input type="radio" name="review[rating]" value="<%= i %>" id="star<%= i %>" class="star-input">
+                  <label for="star<%= i %>" class="star-label" data-rating="<%= i %>">
+                    <i class="bi bi-star"></i>
+                  </label>
+                <% end %>
+              </div>
+              <small class="text-muted">Click stars to rate (1 = Poor, 5 = Excellent)</small>
+            </div>
+            
+            <div class="mb-3">
+              <%= f.label :title, class: "form-label" %>
+              <%= f.text_field :title, class: "form-control", placeholder: "Brief summary of your review" %>
+            </div>
+            
+            <div class="mb-3">
+              <%= f.label :comment, "Your Review", class: "form-label" %>
+              <%= f.text_area :comment, class: "form-control", rows: 5, placeholder: "Tell us about your experience with this product..." %>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+              <%= link_to "Cancel", @product, class: "btn btn-outline-secondary" %>
+              <%= f.submit "Submit Review", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.star-rating {
+  display: flex;
+  gap: 5px;
+}
+
+.star-input {
+  display: none;
+}
+
+.star-label {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #ddd;
+  transition: color 0.2s;
+}
+
+.star-label:hover {
+  color: #ffc107;
+}
+
+.star-label.active {
+  color: #ffc107;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const starInputs = document.querySelectorAll('.star-input');
+  const starLabels = document.querySelectorAll('.star-label');
+  
+  // Handle star selection
+  starLabels.forEach((label, index) => {
+    label.addEventListener('click', function() {
+      const rating = parseInt(this.dataset.rating);
+      
+      // Check the corresponding radio button
+      document.getElementById(`star${rating}`).checked = true;
+      
+      // Update visual state
+      updateStars(rating);
+    });
+    
+    // Handle hover
+    label.addEventListener('mouseenter', function() {
+      const rating = parseInt(this.dataset.rating);
+      updateStars(rating);
+    });
+  });
+  
+  // Reset on mouse leave
+  const starRating = document.querySelector('.star-rating');
+  starRating.addEventListener('mouseleave', function() {
+    const checkedInput = document.querySelector('.star-input:checked');
+    if (checkedInput) {
+      updateStars(parseInt(checkedInput.value));
+    } else {
+      updateStars(0);
+    }
+  });
+  
+  function updateStars(rating) {
+    starLabels.forEach((label, index) => {
+      const star = label.querySelector('i');
+      const starNumber = index + 1;
+      
+      if (starNumber <= rating) {
+        star.classList.remove('bi-star');
+        star.classList.add('bi-star-fill');
+        label.classList.add('active');
+      } else {
+        star.classList.remove('bi-star-fill');
+        star.classList.add('bi-star');
+        label.classList.remove('active');
+      }
+    });
+  }
+});
+</script>

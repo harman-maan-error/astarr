@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"><i class="bi bi-file-text me-2"></i>Manage Pages</h1>
+  <p class="text-muted mb-0">Edit your website's content pages</p>
+</div>
+
+<div class="row">
+  <% @pages.each do |page| %>
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0"><%= page.title %></h5>
+          <span class="badge <%= page.published? ? 'bg-success' : 'bg-danger' %>">
+            <%= page.published? ? 'Published' : 'Draft' %>
+          </span>
+        </div>
+        
+        <div class="card-body">
+          <p class="text-muted small mb-2">
+            <code>/<%= page.slug %></code>
+          </p>
+          <p class="card-text">
+            <%= truncate(strip_tags(page.content), length: 100) %>
+          </p>
+          <p class="text-muted small mb-0">
+            Last updated: <%= page.updated_at.strftime("%B %d, %Y") %>
+          </p>
+        </div>
+        
+        <div class="card-footer">
+          <%= link_to "Edit", edit_admin_page_path(page.slug), class: "btn btn-primary btn-sm" %>
+          <%= link_to "Preview", admin_page_path(page.slug), class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
+          <% if page.published? %>
+            <% case page.slug %>
+            <% when 'about' %>
+              <%= link_to "Live", about_path, class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            <% when 'contact' %>
+              <%= link_to "Live", contact_path, class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            <% when 'shipping' %>
+              <%= link_to "Live", shipping_path, class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            <% when 'returns' %>
+              <%= link_to "Live", returns_path, class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            <% else %>
+              <%= link_to "Live", page_path(page.slug), class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

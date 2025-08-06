@@ -1,0 +1,102 @@
+<% content_for :title, "Products" %>
+
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+      <% if @current_category %>
+        <li class="breadcrumb-item active"><%= @current_category.name %></li>
+      <% else %>
+        <li class="breadcrumb-item active">All Products</li>
+      <% end %>
+    </ol>
+  </nav>
+  
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1>
+        <% if @current_category %>
+          <%= @current_category.name %> Cases
+        <% else %>
+          All iPhone Cases
+        <% end %>
+      </h1>
+      <% if @current_category&.description %>
+        <p class="text-muted"><%= @current_category.description %></p>
+      <% end %>
+    </div>
+    <div class="col-md-4 text-md-end">
+      <p class="text-muted">Showing <%= @products.count %> products</p>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="card-title mb-0">Filters</h6>
+        </div>
+        <div class="card-body">
+          <%= form_with url: products_path, method: :get, local: true, class: "filter-form" do |f| %>
+            <%= f.hidden_field :category, value: params[:category] if params[:category] %>
+            
+            <div class="mb-3">
+              <h6>iPhone Model</h6>
+              <%= f.select :iphone_model, options_for_select([['All Models', '']] + @iphone_models.map { |m| [m, m] }, params[:iphone_model]), {}, { class: "form-select form-select-sm" } %>
+            </div>
+            
+            <div class="mb-3">
+              <h6>Special</h6>
+              <div class="form-check">
+                <%= f.radio_button :filter, '', checked: params[:filter].blank?, class: "form-check-input", id: "filter_all" %>
+                <%= f.label :filter_all, "All Products", class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.radio_button :filter, 'featured', class: "form-check-input", id: "filter_featured" %>
+                <%= f.label :filter_featured, "Featured", class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.radio_button :filter, 'on_sale', class: "form-check-input", id: "filter_sale" %>
+                <%= f.label :filter_sale, "On Sale", class: "form-check-label" %>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6>Sort By</h6>
+              <%= f.select :sort, [
+                ['Name A-Z', ''],
+                ['Price: Low to High', 'price_low'],
+                ['Price: High to Low', 'price_high'],
+                ['Highest Rated', 'rating'],
+                ['Newest First', 'newest']
+              ], { selected: params[:sort] }, { class: "form-select form-select-sm" } %>
+            </div>
+            
+            <%= f.submit "Apply Filters", class: "btn btn-primary btn-sm w-100" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-9">
+      <% if @products.any? %>
+        <div class="row">
+          <% @products.each do |product| %>
+            <div class="col-md-4 col-sm-6 mb-4">
+              <%= render 'shared/product_card', product: product %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <i class="bi bi-search display-1 text-muted"></i>
+          <h3 class="mt-3">No products found</h3>
+          <p class="text-muted">Try adjusting your filters or search terms.</p>
+          <%= link_to "View All Products", products_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

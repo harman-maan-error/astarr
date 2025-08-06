@@ -1,0 +1,22 @@
+<div class="admin-page-preview">
+  <div class="preview-header">
+    <h1>Page Preview: <%= @page.title %></h1>
+    <div class="preview-actions">
+      <%= link_to "Edit", edit_admin_page_path(@page.slug), class: "btn btn-primary" %>
+      <%= link_to "Back to Pages", admin_pages_path, class: "btn btn-secondary" %>
+      <% if @page.published? %>
+        <% if @page.slug == 'about' %>
+          <%= link_to "View Live", about_path, class: "btn btn-success", target: "_blank" %>
+        <% elsif @page.slug == 'contact' %>
+          <%= link_to "View Live", contact_path, class: "btn btn-success", target: "_blank" %>
+        <% else %>
+          <%= link_to "View Live", page_path(@page.slug), class: "btn btn-success", target: "_blank" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="preview-content">
+    <%= render 'pages/page_content', page: @page %>
+  </div>
+</div>

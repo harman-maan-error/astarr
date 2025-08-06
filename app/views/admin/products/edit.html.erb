@@ -1,0 +1,242 @@
+<!-- app/views/admin/products/edit.html.erb -->
+<div class="admin-header">
+  <h1>Edit Product</h1>
+  <%= link_to "← Back to Products", "/admin/products", class: "btn btn-secondary" %>
+</div>
+
+<div class="admin-content">
+  <%= form_with model: @product, url: "/admin/products/#{@product.id}", method: :patch, local: true, class: "admin-form" do |form| %>
+    <% if @product.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h4>
+        <ul>
+          <% @product.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :name, class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", placeholder: "Enter product name" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :slug, "URL Slug", class: "form-label" %>
+      <%= form.text_field :slug, class: "form-control", placeholder: "product-name" %>
+      <small class="form-text text-muted">Used in the product URL. Should be unique.</small>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :base_price, "Price", class: "form-label" %>
+      <%= form.number_field :base_price, step: 0.01, min: 0, class: "form-control", placeholder: "0.00" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :stock_quantity, "Stock Quantity", class: "form-label" %>
+      <%= form.number_field :stock_quantity, min: 0, class: "form-control", placeholder: "0" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :iphone_model, "iPhone Model", class: "form-label" %>
+      <%= form.text_field :iphone_model, class: "form-control", placeholder: "e.g., iPhone 15 Pro" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :category_id, "Category", class: "form-label" %>
+      <%= form.select :category_id, 
+          options_for_select([
+            ['Astarr', 1],
+            ['Astarr Premium', 2]
+          ], @product.category_id), 
+          { prompt: 'Select Category' }, 
+          { class: "form-control" } %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description, "Description (optional)", class: "form-label" %>
+      <%= form.text_area :description, rows: 3, class: "form-control", placeholder: "Enter product description" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.check_box :active, class: "form-check-input" %>
+      <%= form.label :active, "Make product active (visible in store)", class: "form-check-label" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :image, "Product Image", class: "form-label" %>
+      
+      <% if @product.primary_image&.image&.attached? %>
+        <div class="current-image">
+          <p><strong>Current Image:</strong></p>
+          <%= image_tag @product.primary_image.image, style: "max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;" %>
+          <div class="image-actions">
+            <%= form.check_box :remove_image, class: "form-check-input" %>
+            <%= form.label :remove_image, "Remove current image", class: "form-check-label" %>
+          </div>
+        </div>
+      <% end %>
+      
+      <div class="new-image-upload">
+        <p><strong><%= @product.primary_image&.image&.attached? ? "Replace with new image:" : "Add new image:" %></strong></p>
+        <%= form.file_field :image, class: "form-control", accept: "image/*", onchange: "previewImage(this)" %>
+        <small class="form-text text-muted">Upload a new product image (JPG, PNG, GIF)</small>
+        <div id="image-preview" class="image-preview" style="display: none;">
+          <img id="preview-img" src="" alt="Image preview" style="max-width: 200px; max-height: 200px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+      </div>
+    </div>>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Update Product", class: "btn btn-primary" %>
+      <%= link_to "Cancel", "/admin/products", class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .admin-content {
+    max-width: 800px;
+  }
+
+  .admin-form {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #495057;
+    display: block;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .form-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn:hover {
+    opacity: 0.9;
+  }
+
+  .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+  }
+
+  .form-text {
+    font-size: 14px;
+    color: #6c757d;
+  }
+
+  .current-image {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f1f3f4;
+    border-radius: 4px;
+  }
+
+  .image-actions {
+    margin-top: 10px;
+  }
+
+  .form-check-input {
+    margin-right: 8px;
+  }
+
+  .form-check-label {
+    font-weight: normal;
+    color: #dc3545;
+  }
+
+  .new-image-upload {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .image-preview {
+    margin-top: 10px;
+  }
+</style>
+
+<script>
+  function previewImage(input) {
+    const preview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      preview.style.display = 'none';
+    }
+  }
+</script>

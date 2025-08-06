@@ -1,0 +1,125 @@
+<% content_for :title, "My Profile" %>
+
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <i class="bi bi-person-circle display-1 text-muted"></i>
+          <h5 class="card-title mt-3"><%= @user.full_name %></h5>
+          <p class="text-muted"><%= @user.email %></p>
+          <% if @user.is_admin? %>
+            <span class="badge bg-warning">Admin</span>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="list-group mt-3">
+        <a href="#profile" class="list-group-item list-group-item-action active">
+          <i class="bi bi-person me-2"></i>Profile
+        </a>
+        <a href="#orders" class="list-group-item list-group-item-action">
+          <i class="bi bi-bag me-2"></i>My Orders
+        </a>
+        <%= link_to logout_path, method: :delete, class: "list-group-item list-group-item-action text-danger" do %>
+          <i class="bi bi-box-arrow-right me-2"></i>Logout
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="col-md-9">
+      <!-- Profile Section -->
+      <div id="profile">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Profile Information</h5>
+            <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-outline-primary btn-sm" %>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">First Name</label>
+                <p class="form-control-plaintext"><%= @user.first_name %></p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Last Name</label>
+                <p class="form-control-plaintext"><%= @user.last_name %></p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <p class="form-control-plaintext"><%= @user.email %></p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Phone</label>
+                <p class="form-control-plaintext"><%= @user.phone.present? ? @user.phone : "Not provided" %></p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Member Since</label>
+                <p class="form-control-plaintext"><%= @user.created_at.strftime("%B %d, %Y") %></p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Last Login</label>
+                <p class="form-control-plaintext">
+                  <%= @user.last_login ? @user.last_login.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Orders Section -->
+      <div id="orders" class="mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Recent Orders</h5>
+          </div>
+          <div class="card-body">
+            <% if @orders && @orders.any? %>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Order #</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @orders.each do |order| %>
+                      <tr>
+                        <td><%= order.order_number %></td>
+                        <td><%= order.created_at.strftime("%m/%d/%Y") %></td>
+                        <td>
+                          <span class="badge bg-<%= order.status == 'delivered' ? 'success' : 'primary' %>">
+                            <%= order.status.titleize %>
+                          </span>
+                        </td>
+                        <td>$<%= sprintf("%.2f", order.total_amount) %></td>
+                        <td>
+                          <%= link_to "View", order_path(order.order_number), class: "btn btn-sm btn-outline-primary" %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <div class="text-center mt-3">
+                <%= link_to "View All Orders", orders_path, class: "btn btn-primary" %>
+              </div>
+            <% else %>
+              <div class="text-center py-4">
+                <i class="bi bi-bag display-4 text-muted"></i>
+                <h5 class="mt-3">No orders yet</h5>
+                <p class="text-muted">Start shopping to see your orders here!</p>
+                <%= link_to "Shop Now", products_path, class: "btn btn-primary" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

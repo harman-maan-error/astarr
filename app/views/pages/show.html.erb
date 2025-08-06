@@ -1,0 +1,15 @@
+<% content_for :title, @page.title %>
+<% if @page.meta_description.present? %>
+  <% content_for :meta_description, @page.meta_description %>
+<% end %>
+<% if @page.meta_keywords.present? %>
+  <% content_for :meta_keywords, @page.meta_keywords %>
+<% end %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <%= render 'page_content', page: @page %>
+    </div>
+  </div>
+</div>

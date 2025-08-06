@@ -1,0 +1,51 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_number: MyString
+  user: one
+  subtotal: 9.99
+  tax_amount: 9.99
+  tax_rate: 9.99
+  shipping_cost: 9.99
+  total_amount: 9.99
+  status: MyString
+  payment_status: MyString
+  shipping_method: MyString
+  notes: MyText
+  billing_street_address: MyString
+  billing_city: MyString
+  billing_province: MyString
+  billing_postal_code: MyString
+  billing_country: MyString
+  shipping_street_address: MyString
+  shipping_city: MyString
+  shipping_province: MyString
+  shipping_postal_code: MyString
+  shipping_country: MyString
+  shipped_at: 2025-07-24 11:30:10
+  delivered_at: 2025-07-24 11:30:10
+
+two:
+  order_number: MyString
+  user: two
+  subtotal: 9.99
+  tax_amount: 9.99
+  tax_rate: 9.99
+  shipping_cost: 9.99
+  total_amount: 9.99
+  status: MyString
+  payment_status: MyString
+  shipping_method: MyString
+  notes: MyText
+  billing_street_address: MyString
+  billing_city: MyString
+  billing_province: MyString
+  billing_postal_code: MyString
+  billing_country: MyString
+  shipping_street_address: MyString
+  shipping_city: MyString
+  shipping_province: MyString
+  shipping_postal_code: MyString
+  shipping_country: MyString
+  shipped_at: 2025-07-24 11:30:10
+  delivered_at: 2025-07-24 11:30:10

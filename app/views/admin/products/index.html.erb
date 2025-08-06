@@ -1,0 +1,148 @@
+<!-- app/views/admin/products/index.html.erb -->
+<div class="admin-header">
+  <h1>Products</h1>
+  <%= link_to "Add New Product", new_admin_product_path, class: "btn btn-primary" %>
+</div>
+
+<div class="admin-content">
+  <% if @products.any? %>
+    <div class="products-table">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>iPhone Model</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <tr>
+              <td><%= product.id %></td>
+              <td><%= product.name %></td>
+              <td><%= product.iphone_model %></td>
+              <td><%= product.category&.name %></td>
+              <td>$<%= product.base_price %></td>
+              <td><%= product.stock_quantity %></td>
+              <td>
+                <%= link_to "Edit", "/admin/products/#{product.id}/edit", class: "btn btn-sm btn-warning" %>
+                <%= link_to "Delete", "/admin/products/#{product.id}", 
+                    method: :delete, 
+                    data: { confirm: "Are you sure?" }, 
+                    class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="no-products">
+      <h3>No products found</h3>
+      <p>Start by creating your first product.</p>
+      <%= link_to "Add Your First Product", new_admin_product_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .admin-content {
+    width: 100%;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .table th,
+  .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+  }
+
+  .table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn:hover {
+    opacity: 0.9;
+  }
+
+  .no-products {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+
+  .no-products h3 {
+    color: #495057;
+    margin-bottom: 10px;
+  }
+
+  .no-products p {
+    color: #6c757d;
+    margin-bottom: 20px;
+  }
+</style>

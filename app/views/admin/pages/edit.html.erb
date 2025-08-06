@@ -1,0 +1,71 @@
+<div class="admin-page-edit">
+  <div class="page-header">
+    <h1>Edit <%= @page.title %></h1>
+    <%= link_to "← Back to Pages", admin_pages_path, class: "btn btn-secondary" %>
+  </div>
+  
+  <%= form_with model: @page, url: admin_page_path(@page.slug), local: true, class: "page-edit-form" do |form| %>
+    <% if @page.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@page.errors.count, "error") %> prohibited this page from being saved:</h4>
+        <ul>
+          <% @page.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <div class="form-sections">
+      <div class="main-content">
+        <div class="form-group">
+          <%= form.label :title, class: "form-label" %>
+          <%= form.text_field :title, class: "form-control form-control-lg" %>
+        </div>
+        
+        <div class="form-group">
+          <%= form.label :content, "Page Content", class: "form-label" %>
+          <%= form.text_area :content, class: "form-control rich-editor", rows: 20 %>
+          <small class="form-text text-muted">
+            You can use HTML tags for formatting. Common tags: &lt;p&gt;, &lt;h2&gt;, &lt;h3&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;a&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;, &lt;br&gt;
+          </small>
+        </div>
+      </div>
+      
+      <div class="sidebar">
+        <div class="form-group">
+          <%= form.label :published, class: "form-label" %>
+          <div class="form-check">
+            <%= form.check_box :published, class: "form-check-input" %>
+            <%= form.label :published, "Publish this page", class: "form-check-label" %>
+          </div>
+          <small class="form-text text-muted">
+            Unpublished pages are not visible to the public
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <%= form.label :meta_description, "Meta Description", class: "form-label" %>
+          <%= form.text_area :meta_description, class: "form-control", rows: 3, maxlength: 160 %>
+          <small class="form-text text-muted">
+            For search engines (max 160 characters)
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <%= form.label :meta_keywords, "Meta Keywords", class: "form-label" %>
+          <%= form.text_field :meta_keywords, class: "form-control" %>
+          <small class="form-text text-muted">
+            Comma-separated keywords for SEO
+          </small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <%= form.submit "Update Page", class: "btn btn-primary btn-lg" %>
+      <%= link_to "Cancel", admin_pages_path, class: "btn btn-secondary btn-lg" %>
+      <%= link_to "Preview", admin_page_path(@page.slug), class: "btn btn-info btn-lg", target: "_blank" %>
+    </div>
+  <% end %>
+</div>
